@@ -1,130 +1,115 @@
 import tkinter as tk
-from tkinter import Canvas, filedialog, StringVar, Radiobutton
-from tkinter import font as tkfont
+from tkinter import *
 
 
-class SampleApp(tk.Tk):
+class App():
+    def __init__(self, master):
+        self.frame = Frame(master)
+        self.frame.pack()
+        self.add_quit_button()
+        self.add_nav_buttons()
 
-    def __init__(self, *args, **kwargs):
-        tk.Tk.__init__(self, *args, **kwargs)
+    def add_quit_button(self):
+        self.button = Button(
+            self.frame, text="QUIT", fg="red", command=self.frame.quit
+        )
+        self.button.pack(side=LEFT)
+    
+    def add_nav_buttons(self):
+        MODES = [
+            ("Add State", "ADD_STATE", self.set_add_state_mode),
+            ("Add Transition Arrow", "ADD_TRANSITION",
+             self.set_add_state_mode),
+            ("Delete State", "DELETE_STATE", self.set_add_state_mode),
+            ("Edit State", "EDIT_STATE", self.set_add_state_mode),
+        ]
 
-        self.title_font = tkfont.Font(
-            family='Helvetica', size=18, weight="bold", slant="italic")
+        for text, mode, command in MODES:
+            self.button  = Button(
+                self.frame, text="text", fg="black", command=command
+            )
+            self.button.pack(side=LEFT)
 
-        # the container is where we'll stack a bunch of frames
-        # on top of each other, then the one we want visible
-        # will be raised above the others
-        container = tk.Frame(self)
-        container.pack(side="top", fill="both", expand=True)
-        container.grid_rowconfigure(0, weight=1)
-        container.grid_columnconfigure(0, weight=1)
-
-        self.frames = {}
-        for F in (StartPage, CreateDFA):
-            page_name = F.__name__
-            frame = F(parent=container, controller=self)
-            self.frames[page_name] = frame
-
-            # put all of the pages in the same location;
-            # the one on the top of the stacking order
-            # will be the one that is visible.
-            frame.grid(row=0, column=0, sticky="nsew")
-
-        self.show_frame("StartPage")
-
-    def show_frame(self, page_name):
-        '''Show a frame for the given page name'''
-        frame = self.frames[page_name]
-        frame.tkraise()
-
-class StartPage(tk.Frame):
-
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
-        self.add_title(controller)
-        self.add_create_dfa_button(controller)
+    def set_add_state_mode(self):
+        print("1")
 
     def add_title(self, controller):
         label = tk.Label(self, text="PFLAP",
-                         font=controller.title_font)
+                        font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
-    
+
     def add_create_dfa_button(self, controller):
         create_dfa = tk.Button(self, text="Create DFA",
-                               command=lambda: controller.show_frame("CreateDFA"))
+                            command=lambda: controller.show_frame("CreateDFA"))
         create_dfa.pack()
 
-class CreateDFA(tk.Frame):
+    # class CreateDFA(tk.Frame):
 
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
-        self.add_title(controller)
-        self.add_upload_dfa_from_file_button()
-        self.add_dfa_buttons(controller)
-        self.add_canvas(controller)
-        self.add_return_home_button()
+    # def __init__(self, parent, controller):
+    # tk.Frame.__init__(self, parent)
+    # self.controller = controller
+    # self.add_title(controller)
+    # self.add_upload_dfa_from_file_button()
+    # self.add_dfa_buttons(controller)
+    # self.add_canvas(controller)
+    # self.add_return_home_button()
 
-    def add_title(self, controller):
-        label = tk.Label(self, text="Create a DFA",
-                         font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
-    
-    def add_dfa_buttons(self, controller):
-        MODES = [
-            ("Add State", "ADD_STATE" , self.set_add_state_mode),
-            ("Add Transition Arrow", "ADD_TRANSITION", self.set_add_transition_mode),
-            ("Delete State", "DELETE_STATE", self.set_delete_mode),
-            ("Edit State", "EDIT_STATE", self.set_edit_state_mode),
-        ]
-        v = StringVar()
-        v.set("L")  # initialize
+    # def add_title(self, controller):
+    # label = tk.Label(self, text="Create a DFA",
+    #                  font=controller.title_font)
+    # label.pack(side="top", fill="x", pady=10)
 
-        for text, mode, command in MODES:
-            b = Radiobutton(controller, text=text,
-                            variable=v, value=mode, command=command)
-            b.pack(anchor="w")
-    
-    def set_add_state_mode(self):
-        print("1")
-    
-    def set_add_transition_mode(self):
-        print("2")
-    
-    def set_delete_mode(self):
-        print("3")
-    
-    def set_edit_state_mode(self):
-        print("4")
+    # def add_dfa_buttons(self, controller):
+    # MODES = [
+    #     ("Add State", "ADD_STATE", self.set_add_state_mode),
+    #     ("Add Transition Arrow", "ADD_TRANSITION",
+    #      self.set_add_transition_mode),
+    #     ("Delete State", "DELETE_STATE", self.set_delete_mode),
+    #     ("Edit State", "EDIT_STATE", self.set_edit_state_mode),
+    # ]
+    # v = StringVar()
+    # v.set("L")  # initialize
 
-    def add_upload_dfa_from_file_button(self):
-        file_button = tk.Button(self, text="Create DFA from file",
-                                command=self.ask_for_file)
-        file_button.pack()
-    
-    def add_canvas(self, controller):
-        canvas = Canvas(controller)
+    # for text, mode, command in MODES:
+    # b = Radiobutton(controller, text=text,
+    #                 variable=v, value=mode, command=command)
+    # b.pack(anchor="w")
 
+    # def set_add_state_mode(self):
+    # print("1")
 
+    # def set_add_transition_mode(self):
+    # print("2")
 
-    def add_return_home_button(self):
-        return_home_button = tk.Button(self, text="Go to the home page",
-                           command=self.return_home)
-        return_home_button.pack()
+    # def set_delete_mode(self):
+    # print("3")
 
-    def ask_for_file(self):
-        root = tk.Tk()
-        root.filename = filedialog.askopenfilename(
-    initialdir="/", title="Select file", filetypes=(("txt files", "*.txt"), ("all files", "*.*")))
-  
+    # def set_edit_state_mode(self):
+    # print("4")
 
-    def return_home(self):
-        self.controller.show_frame("StartPage")
-    
+    # def add_upload_dfa_from_file_button(self):
+    # file_button = tk.Button(self, text="Create DFA from file",
+    #                         command=self.ask_for_file)
+    # file_button.pack()
 
+    # def add_canvas(self, controller):
+    # canvas = Canvas(controller)
 
+    # def add_return_home_button(self):
+    # return_home_button = tk.Button(self, text="Go to the home page",
+    #                                command=self.return_home)
+    # return_home_button.pack()
+
+    # def ask_for_file(self):
+    # root = tk.Tk()
+    # root.filename = filedialog.askopenfilename(
+    #     initialdir="/", title="Select file", filetypes=(("txt files", "*.txt"), ("all files", "*.*")))
+
+    # def return_home(self):
+    # self.controller.show_frame("StartPage")
 
 if __name__ == "__main__":
-    app = SampleApp()
-    app.mainloop()
+    root = tk.Tk()
+    app = App(root)
+    root.mainloop()
+    root.destroy()  # optional; see description below
