@@ -6,37 +6,51 @@ class App():
     def __init__(self, master):
         self.frame = Frame(master)
         self.frame.pack()
+        self.add_title()
         self.add_quit_button()
         self.add_nav_buttons()
+        self.add_canvas()
+
+    def add_title(self):
+        label = tk.Label(self.frame, text="PFLAP")
+        label.pack(side="top", fill="x", pady=10)
 
     def add_quit_button(self):
         self.button = Button(
-            self.frame, text="QUIT", fg="red", command=self.frame.quit
-        )
+            self.frame, text="QUIT", fg="red", command=self.frame.quit)
         self.button.pack(side=LEFT)
     
     def add_nav_buttons(self):
         MODES = [
             ("Add State", "ADD_STATE", self.set_add_state_mode),
             ("Add Transition Arrow", "ADD_TRANSITION",
-             self.set_add_state_mode),
-            ("Delete State", "DELETE_STATE", self.set_add_state_mode),
-            ("Edit State", "EDIT_STATE", self.set_add_state_mode),
+             self.set_add_transition_mode),
+            ("Delete State", "DELETE_STATE", self.set_delete_mode),
+            ("Edit State", "EDIT_STATE", self.set_edit_state_mode),
         ]
 
         for text, mode, command in MODES:
             self.button  = Button(
-                self.frame, text="text", fg="black", command=command
+                self.frame, text=text, fg="black", command=command
             )
             self.button.pack(side=LEFT)
 
     def set_add_state_mode(self):
         print("1")
 
-    def add_title(self, controller):
-        label = tk.Label(self, text="PFLAP",
-                        font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+    def set_add_transition_mode(self):
+        print("2")
+
+    def set_delete_mode(self):
+        print("3")
+
+    def set_edit_state_mode(self):
+        print("4")
+
+
+    def add_canvas(self):
+        pass
+
 
     def add_create_dfa_button(self, controller):
         create_dfa = tk.Button(self, text="Create DFA",
