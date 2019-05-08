@@ -71,7 +71,6 @@ class DFA():
     
 
     def add_state(self, event):
-        print(event)
         x_coord_clicked = event.x
         y_coord_clicked = event.y
 
@@ -89,7 +88,12 @@ class DFA():
         pass
     
     def delete_state(self, event):
-        pass
+        x = self.canvas.canvasx(event.x)
+        y = self.canvas.canvasy(event.y)
+
+        closest_item_tag = self.canvas.find_closest(x, y, halo=None, start=None)[0]
+        
+        self.canvas.delete(closest_item_tag)
     
     def edit_state(self, event):
         pass
@@ -99,4 +103,3 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = DFA(root)
     root.mainloop()
-   
