@@ -73,6 +73,8 @@ class DfaScreen():
         print("clicked at", self.current_mode, event.x, event.y)
     
     def add_state(self, event):
+        self.number_of_states += 1
+        
         x_coord_clicked = event.x
         y_coord_clicked = event.y
 
@@ -84,19 +86,19 @@ class DfaScreen():
         y1 = y_coord_clicked - 25
 
         state_id = self.canvas.create_oval(
-            x0, y0, x1, y1, fill="yellow", tags=str(self.number_of_states))
+            x0, y0, x1, y1, fill="yellow", tags="state")
 
         state_title = self.get_state_title()
 
         self.canvas.create_text(x_coord_clicked, y_coord_clicked, fill="black", font="Times 18 italic bold",
                                 text=state_title)
         
+        
     
     def get_state_title(self):
         next_unique_state_number = self.number_of_states
         next_unique_state_number = str(next_unique_state_number)
         next_unique_state_number = "q" + next_unique_state_number
-        self.number_of_states += 1
         return next_unique_state_number
 
     
@@ -104,10 +106,17 @@ class DfaScreen():
         x = self.canvas.canvasx(event.x)
         y = self.canvas.canvasy(event.y)
 
-        closest_item_tag = self.canvas.find_closest(
-             x, y, halo=None, start=None)[0]
+        closest_item_tag = self.canvas.find_withtag("state")
+        print(closest_item_tag)
         
         print("in add transition mode")
+    
+    def find_closest_withtag(self, x, y):
+        possible_states = self.canvas.find_withtag("state")
+        closest_item_tag = self.canvas.find_closest(
+            x, y, halo=None, start=None)[0]
+    
+
     
     def delete_state(self, event):
         x = self.canvas.canvasx(event.x)
